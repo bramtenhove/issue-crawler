@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Issue crawler{% endblock %}</title>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+        {% endblock %}
+    </head>
+    <body id="{% block body_id %}{% endblock %}">
+
+    {% block header %}
+        <header>
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="{{ path('index') }}">
+                        <img src="{{ asset('assets/images/logo.jpg') }}" alt="Issue Crawler logo" width="112" height="28">
+                    </a>
+                    <div class="navbar-burger burger" data-target="navbar-main">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <div id="navbar-main" class="navbar-menu">
+                    <div class="navbar-start">
+                        {% block header_navigation_links %}
+                            <a class="navbar-item" href="{{ path('index') }}">
+                                Home
+                            </a>
+                        {%  endblock %}
+                    </div>
+                </div>
+            </nav>
+        </header>
+    {% endblock %}
+
+    {% block hero %}{% endblock %}
+
+    {% block body %}
+        <section class="section">
+            <div class="container">
+                {{ include('default/_flash_messages.html.twig') }}
+
+                {% block main %}{% endblock %}
+            </div>
+        </section>
+    {% endblock %}
+
+    {% block footer %}
+        <footer class="footer">
+            <div class="container">
+                <div class="content">
+                    <div class="columns">
+                        <div class="column">
+                            <p>&copy; {{ 'now'|date('Y') }} by <a href="https://bramtenhove.nl">Bram ten Hove</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
+
+    {% block javascripts %}
+        <script src="{{ asset('assets/js/navigation.js') }}"></script>
+        <script src="{{ asset('assets/js/alert.js') }}"></script>
+    {% endblock %}
+
+    </body>
+</html>
