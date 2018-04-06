@@ -9,32 +9,36 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
- * Kernel Class is the heart of the application.
+ * Class Kernel.
  */
-class Kernel extends BaseKernel {
+class Kernel extends BaseKernel
+{
   use MicroKernelTrait;
 
   const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
   /**
-   * {@inheritdoc}
+   * @return string
    */
-  public function getCacheDir() {
-    return $this->getProjectDir() . '/var/cache/' . $this->environment;
+  public function getCacheDir()
+  {
+    return $this->getProjectDir().'/var/cache/'.$this->environment;
   }
 
   /**
-   * {@inheritdoc}
+   * @return string
    */
-  public function getLogDir() {
-    return $this->getProjectDir() . '/var/log';
+  public function getLogDir()
+  {
+    return $this->getProjectDir().'/var/log';
   }
 
   /**
-   * {@inheritdoc}
+   * @return \Generator
    */
-  public function registerBundles() {
-    $contents = require $this->getProjectDir() . '/config/bundles.php';
+  public function registerBundles()
+  {
+    $contents = require $this->getProjectDir().'/config/bundles.php';
     foreach ($contents as $class => $envs) {
       if (isset($envs['all']) || isset($envs[$this->environment])) {
         yield new $class();
@@ -43,32 +47,34 @@ class Kernel extends BaseKernel {
   }
 
   /**
-   * {@inheritdoc}
+   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+   * @param \Symfony\Component\Config\Loader\LoaderInterface        $loader
    */
-  protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader) {
-    $container->setParameter('container.autowiring.strict_mode', TRUE);
-    $container->setParameter('container.dumper.inline_class_loader', TRUE);
-    $confDir = $this->getProjectDir() . '/config';
-    $loader->load($confDir . '/packages/*' . self::CONFIG_EXTS, 'glob');
-    if (is_dir($confDir . '/packages/' . $this->environment)) {
-      $loader->load($confDir . '/packages/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
+  protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
+  {
+    $container->setParameter('container.autowiring.strict_mode', true);
+    $container->setParameter('container.dumper.inline_class_loader', true);
+    $confDir = $this->getProjectDir().'/config';
+    $loader->load($confDir.'/packages/*'.self::CONFIG_EXTS, 'glob');
+    if (is_dir($confDir.'/packages/'.$this->environment)) {
+      $loader->load($confDir.'/packages/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
     }
-    $loader->load($confDir . '/services' . self::CONFIG_EXTS, 'glob');
-    $loader->load($confDir . '/services_' . $this->environment . self::CONFIG_EXTS, 'glob');
+    $loader->load($confDir.'/services'.self::CONFIG_EXTS, 'glob');
+    $loader->load($confDir.'/services_'.$this->environment.self::CONFIG_EXTS, 'glob');
   }
 
   /**
-   * {@inheritdoc}
+   * @param \Symfony\Component\Routing\RouteCollectionBuilder $routes
    */
-  protected function configureRoutes(RouteCollectionBuilder $routes) {
-    $confDir = $this->getProjectDir() . '/config';
-    if (is_dir($confDir . '/routes/')) {
-      $routes->import($confDir . '/routes/*' . self::CONFIG_EXTS, '/', 'glob');
+  protected function configureRoutes(RouteCollectionBuilder $routes)
+  {
+    $confDir = $this->getProjectDir().'/config';
+    if (is_dir($confDir.'/routes/')) {
+      $routes->import($confDir.'/routes/*'.self::CONFIG_EXTS, '/', 'glob');
     }
-    if (is_dir($confDir . '/routes/' . $this->environment)) {
-      $routes->import($confDir . '/routes/' . $this->environment . '/**/*' . self::CONFIG_EXTS, '/', 'glob');
+    if (is_dir($confDir.'/routes/'.$this->environment)) {
+      $routes->import($confDir.'/routes/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
     }
-    $routes->import($confDir . '/routes' . self::CONFIG_EXTS, '/', 'glob');
+    $routes->import($confDir.'/routes'.self::CONFIG_EXTS, '/', 'glob');
   }
-
 }
